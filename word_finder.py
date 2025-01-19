@@ -1,11 +1,24 @@
+import chardet
+
 word_to_find = input("Type word to find: ")
+
+def detect_encoding(filename):
+    """Function to detect the encoding using in the specified document"""
+    with open(filename, "rb") as f:
+        raw_data = f.read()
+        result = chardet.detect(raw_data)
+        encoding = result["encoding"]
+        return encoding
+
+# Get encoding used and store it
+encoding_used = detect_encoding("spirit of iron.txt")
 
 
 def book_reader(filename):
     """A simple function to read the contents of a file."""
     # handle errors that may arise from missing files.
     try:
-        with open(filename, encoding="utf-8") as file_object:
+        with open(filename, encoding=encoding_used) as file_object:
             content = file_object.read()
     except FileNotFoundError:
         print("Requested file not found.")
@@ -59,8 +72,9 @@ print()
 
 word_finder(read_book, word_to_find)
 
+
 # things to do:
-# make this a new repo in github
+
 # add a function that gets the encoding of the document to be searched
 # also ask the user for name of document. add a note that the document should be in
 # the same location as the word finder code
